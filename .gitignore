@@ -1,11 +1,43 @@
-# Build and Release Folders
-bin/
-bin-debug/
-bin-release/
-
-# Other files and folders
-.settings/
-
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+err
+out
+fasta-split
+tmp.sh
+.*
+*.fa
+*.aln
+*.sam
+taxoner-out
+count-out/
+current_size
+fasta/
+files-to-process
+krona-out/
+read-out/
+sam-files
+sams-to-process
+scripts/workers/1make-fastaDB.sh
+scripts/workers/2make-fastaDB.sh
+scripts/workers/3make-fastaDB.sh
+scripts/workers/4make-fastaDB.sh
+scripts/workers/DNA_1_taxa_to_count.txt
+scripts/workers/DNA_2_taxa_to_count.txt
+scripts/workers/DNA_3_taxa_to_count.txt
+scripts/workers/DNA_4_taxa_to_count.txt
+scripts/workers/ncbi-taxoner-results-files
+search_test/
+split-files
+taxa_files
+test-search.sh
+DNA_1-db-list
+DNA_2-db-list
+DNA_3-db-list
+DNA_4-db-list
+db-list
+dirs-to-cat
+for-upload/
+low-qual-files
+makedb-files
+makedb-files-to-process
+high-qual-count-out
+curl_output.txt
+high-qual-files
