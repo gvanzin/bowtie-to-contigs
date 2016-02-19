@@ -6,8 +6,8 @@
 #PBS -l select=1:ncpus=12:mem=23gb
 #PBS -l pvmem=46gb
 #PBS -l place=pack:shared
-#PBS -l walltime=72:00:00
-#PBS -l cput=72:00:00
+#PBS -l walltime=24:00:00
+#PBS -l cput=24:00:00
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m bea
 
@@ -30,12 +30,6 @@ else
   exit 1
 fi
 
-PROG=`basename $0 ".sh"`
-#Just going to put stdout and stderr together into stdout
-STDOUT_DIR="$CWD/out/$PROG"
-
-init_dir "$STDOUT_DIR"
-
 TMP_FILES=$(mktemp)
 
 get_lines $FILES_TO_PROCESS $TMP_FILES $PBS_ARRAY_INDEX $STEP_SIZE
@@ -45,28 +39,30 @@ NUM_FILES=$(lc $TMP_FILES)
 echo Found \"$NUM_FILES\" files to process
 
 while read FASTA; do
-    FULLPATH=$SPLIT_FA_DIR/$FASTA
-    
-    OUT_DIR=$TAXONER_OUT_DIR/$FASTA
+    IN=$SPLIT_FA_DIR/$FASTA
+   
+    OUT_DIR=$BOWTIE2_OUT_DIR/$(dirname $FASTA)
+
+    OUT=$OUT_DIR/$(basename $FASTA ".fa").sam
 
     if [[ ! -d "$OUT_DIR" ]]; then
         mkdir -p "$OUT_DIR"
     fi
     
-    if [[ -z $(find $OUT_DIR -iname Taxonomy.txt) ]]; then
-        echo "Processing $FASTA"
-    else
-        echo "Taxonomy.txt already exists, skipping..."
+    if [[ -e $OUT ]]; then
+        echo "Sam file already exists, skipping..."
         continue
+    else
+        echo "Processing $FASTA"
     fi
 
-    taxoner64 -t 12 \
-    --dbPath $BOWTIEDB \
-    --taxpath $TAXA \
-    --seq $FULLPATH \
-    --output $OUT_DIR \
-    --fasta \
-    -y $PRJ_DIR/scripts/extra_commands.txt
+    bowtie2 -p 12 \
+        --very-sensitive-local \
+        -f \
+        --no-unal \
+        -x $BOWTIE2_DB \
+        -U $IN \
+        -S $OUT
 
 done < "$TMP_FILES"
 

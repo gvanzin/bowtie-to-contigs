@@ -15,10 +15,10 @@ STDOUT_DIR="$CWD/out/$PROG"
 
 init_dir "$STDOUT_DIR"
 
-if [[ -d "$TAXONER_OUT_DIR" ]]; then
+if [[ -d "$BOWTIE2_OUT_DIR" ]]; then
     echo "Continuing where you left off..."
 else
-    mkdir -p "$TAXONER_OUT_DIR"
+    mkdir -p "$BOWTIE2_OUT_DIR"
 fi
 
 cd "$SPLIT_FA_DIR"
@@ -38,15 +38,13 @@ fi
 export FILES_TO_PROCESS="$PRJ_DIR/files-to-process"
 
 while read FASTA; do
+ 
+    OUT_DIR=$BOWTIE2_OUT_DIR/$(dirname $FASTA)
 
-    OUT_DIR=$TAXONER_OUT_DIR/$FASTA
+    OUT=$OUT_DIR/$(basename $FASTA ".fa").sam
 
-    if [[ -d $OUT_DIR ]]; then
-        if [[ -z $(find $OUT_DIR -iname Taxonomy.txt) ]]; then
-            echo $FASTA >> $FILES_TO_PROCESS
-        else
-            continue
-        fi
+    if [[ -e $OUT ]]; then
+        continue
     else
         echo $FASTA >> $FILES_TO_PROCESS
     fi
@@ -57,10 +55,10 @@ NUM_FILES=$(lc $FILES_TO_PROCESS)
 
 echo \"Found $NUM_FILES to process\"
 
-JOB=$(qsub -J 1-$NUM_FILES:$STEP_SIZE -v PRJ_DIR,STEP_SIZE,WORKER_DIR,BIN_DIR,FILES_TO_PROCESS,SPLIT_FA_DIR,TAXONER_OUT_DIR -N taxoner64 -j oe -o "$STDOUT_DIR" $WORKER_DIR/run-taxoner.sh)
+JOB=$(qsub -J 1-$NUM_FILES:$STEP_SIZE -v PRJ_DIR,STEP_SIZE,WORKER_DIR,FILES_TO_PROCESS,SPLIT_FA_DIR,BOWTIE2_OUT_DIR -N bowtie2 -j oe -o "$STDOUT_DIR" $WORKER_DIR/run-bowtie2.sh)
 
 if [ $? -eq 0 ]; then
-  echo Submitted job \"$JOB\" for you in steps of \"$STEP_SIZE.\" Remember: time you enjoy wasting is not wasted time.
+  echo Submitted job \"$JOB\" for you in steps of \"$STEP_SIZE.\" Remember: sholders back, chin tucked in, tongue on roof of mouth, deep belly breaths.
 else
   echo -e "\nError submitting job\n$JOB\n"
 fi

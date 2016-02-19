@@ -13,7 +13,7 @@ export PRJ_DIR="$COMMON_DIR/bowtie-to-contigs"
 
 #input contigs / also where bowtie2db will be
 export CONTIG_DIR="$COMMON_DIR/spades_output"
-export BOWTIE_DB=$CONTIG_DIR
+export BOWTIE2_DB="$CONTIG_DIR/final_contigs"
 
 #input fasta
 #export FASTA_DIR="$PRJ_DIR/fasta"
@@ -21,7 +21,7 @@ export FASTA_DIR="/gsfs1/rsgrps/bhurwitz/kyclark/mouse/data/screened"
 
 #place to store split-up fasta (step 00)
 export ALT_DATA="/rsgrps/bhurwitz/scottdaniel/uproc_shortread_to_pfam/data"
-export SPLIT_FA_DIR="$ALT_DATA/split-fasta"
+export SPLIT_FA_DIR="$ALT_DATA/split"
 #export SPLIT_FA_DIR="$PRJ_DIR/fasta-split"
 
 #place that original fastq's are
