@@ -1,23 +1,24 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-#PBS -W group_list=bhurwitz
-#PBS -q standard
-#PBS -l jobtype=cluster_only
-#PBS -l select=1:ncpus=12:mem=23gb
-#PBS -l pvmem=46gb
-#PBS -l place=pack:shared
-#PBS -l walltime=24:00:00
-#PBS -l cput=24:00:00
-#PBS -o out/
-#PBS -e out/
-#PBS -M scottdaniel@email.arizona.edu
-#PBS -m bea
+#SBATCH -J anvi-gendb           # Job name
+#SBATCH -o ./out/anvi-gendb.%j.out    # Specify stdout output file (%j expands to jobId)
+#SBATCH -p normal           # Queue name
+#SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
+#SBATCH -n 16                     # Total number of tasks
+#SBATCH -t 24:00:00              # Run time (hh:mm:ss) - 1.5 hours
+#SBATCH --mail-user=scottdaniel@email.arizona.edu
+#SBATCH --mail-type=all
+#SBATCH -A iPlant-Collabs         # Specify allocation to charge against
 
-module list
+#automagic offloading for the xeon phi co-processor
+#in case anything uses Intel's Math Kernel Library
+export MKL_MIC_ENABLE=1
+export OMP_NUM_THREADS=16
+export MIC_OMP_NUM_THREADS=240
+export OFFLOAD_REPORT=2
 
 module load hdf5
 
-cd $PBS_O_WORKDIR
 CONFIG="./config.sh"
 
 if [ -e $CONFIG ]; then
@@ -38,5 +39,4 @@ fi
 
 cd $CONTIG_DIR
 anvi-gen-contigs-database -f final_contigs.fasta -o anvi-contigs.db
-
 
