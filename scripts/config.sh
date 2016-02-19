@@ -15,6 +15,7 @@ export PRJ_DIR="$COMMON_DIR/bowtie-to-contigs"
 export CONTIG_DIR="$COMMON_DIR/spades_output/K21"
 export CONTIGS="$CONTIG_DIR/final_contigs.fasta"
 export BOWTIE2_DB="$CONTIG_DIR/final_contigs"
+export ANVI_CONTIG_DB="$CONTIG_DIR/anvi-contig.db"
 
 #input fasta
 #export FASTA_DIR="$PRJ_DIR/fasta"

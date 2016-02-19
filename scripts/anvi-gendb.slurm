@@ -38,5 +38,5 @@ else
 fi
 
 cd $CONTIG_DIR
-anvi-gen-contigs-database -f final_contigs.fasta -o anvi-contigs.db
+anvi-gen-contigs-database -f $CONTIGS -o $ANVI_CONTIG_DB
 
