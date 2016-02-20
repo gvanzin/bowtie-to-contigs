@@ -31,7 +31,8 @@ export FASTQ_DIR="/gsfs1/rsgrps/bhurwitz/hurwitzlab/data/raw/Doetschman_20111007
 export SPLIT_FQ_DIR="$PRJ_DIR/split-fastq"
 
 #place to store bowtie2 results (step 01)
-export BOWTIE2_OUT_DIR="$PRJ_DIR/bowtie2-out"
+#export BOWTIE2_OUT_DIR="$PRJ_DIR/bowtie2-out"
+export BOWTIE2_OUT_DIR="$PRJ_DIR/bowtie2-out-for-anvi"
 
 #where the worker scripts are (PBS batch scripts and their python/perl workdogs)
 export WORKER_DIR="$PRJ_DIR/scripts/workers"
