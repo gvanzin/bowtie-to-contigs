@@ -13,6 +13,12 @@
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m bea
 
+module load hdf5
+
+perlbrew switch perl-5.22.1@default
+
+cpanm --force LWP::UserAgent
+
 cd $PBS_O_WORKDIR
 CONFIG="./config.sh"
 
