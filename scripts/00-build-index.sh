@@ -20,4 +20,4 @@ else
   exit 1
 fi
 
-sbatch -o ./out/bowtie2build.%j.out $WORKER_DIR/run-bowtie2-build.sh
+sbatch $WORKER_DIR/run-bowtie2-build.sh

@@ -7,7 +7,7 @@
 set -u
 source ./config.sh
 export CWD="$PWD"
-export STEP_SIZE=100
+export STEP_SIZE=10
 
 PROG=`basename $0 ".sh"`
 #Just going to put stdout and stderr together into stdout
@@ -57,10 +57,12 @@ NUM_FILES=$(lc $FILES_TO_PROCESS)
 
 echo \"Found $NUM_FILES to process\"
 
-JOB=$(sbatch --array 1-$NUM_FILES:$STEP_SIZE -J bowtie2 -o "$STDOUT_DIR/runbowtie_%A_%a.out" $WORKER_DIR/run-bowtie2.sh)
+echo \"Splitting them up in batches of "$STEP_SIZE"\"
 
-if [ $? -eq 0 ]; then
-  echo Submitted job \"$JOB\" for you in steps of \"$STEP_SIZE.\" Remember: sholders back, chin tucked in, tongue on roof of mouth, deep belly breaths.
-else
-  echo -e "\nError submitting job\n$JOB\n"
-fi
+array=(1 11 21 31 41 51 61 71 81 91 101)
+
+for i in "${array[@]}"; do
+    export FILE_START=$i
+    echo Doing file $i plus 9 more
+    sbatch $WORKER_DIR/run-bowtie2.sh
+done

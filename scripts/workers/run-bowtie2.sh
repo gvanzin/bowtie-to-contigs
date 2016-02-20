@@ -1,5 +1,7 @@
 #!/bin/bash
 #SBATCH -p normal           # Queue name
+#SBATCH -J bowtie2
+#SBATCH -o ./out/run-bowtie2.%j.out
 #SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
 #SBATCH -n 16                     # Total number of tasks
 #SBATCH -t 24:00:00              # Run time (hh:mm:ss) - 1.5 hours
@@ -35,12 +37,13 @@ fi
 LEFT_TMP_FILES=$(mktemp)
 RIGHT_TMP_FILES=$(mktemp)
 
-get_lines $LEFT_FILES_LIST $LEFT_TMP_FILES $SLURM_ARRAY_TASK_ID $STEP_SIZE
-get_lines $RIGHT_FILES_LIST $RIGHT_TMP_FILES $SLURM_ARRAY_TASK_ID $STEP_SIZE
+get_lines $LEFT_FILES_LIST $LEFT_TMP_FILES $FILE_START $STEP_SIZE
+get_lines $RIGHT_FILES_LIST $RIGHT_TMP_FILES $FILE_START $STEP_SIZE
 
 NUM_FILES=$(lc $LEFT_TMP_FILES)
 
 echo Found \"$NUM_FILES\" files to process
+echo Processing $(cat $LEFT_TMP_FILES) and $(cat $RIGHT_TMP_FILES)
 
 while read LEFT_FASTQ; do
 
