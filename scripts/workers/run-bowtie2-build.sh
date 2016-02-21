@@ -1,6 +1,5 @@
 #!/bin/bash
 #SBATCH -J bowtie2build           # Job name
-#SBATCH -o ./out/bowtie2buile.%j.out
 #SBATCH -p serial           # Queue name
 #SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
 #SBATCH -n 16                     # Total number of tasks

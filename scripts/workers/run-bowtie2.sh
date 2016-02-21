@@ -1,7 +1,6 @@
 #!/bin/bash
 #SBATCH -p normal           # Queue name
 #SBATCH -J bowtie2
-#SBATCH -o ./out/run-bowtie2.%j.out
 #SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
 #SBATCH -n 16                     # Total number of tasks
 #SBATCH -t 24:00:00              # Run time (hh:mm:ss) - 1.5 hours

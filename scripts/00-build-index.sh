@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 #all this does is launch bowite2-build for you
-
+set -u
+export CWD="$PWD"
 CONFIG="./config.sh"
 
 if [ -e $CONFIG ]; then
@@ -10,6 +11,13 @@ else
     echo MIssing config \"$CONFIG\"
     exit 12385
 fi
+
+PROG=`basename $0 ".sh"`
+#Just going to put stdout and stderr together into stdout
+STDOUT_DIR="$CWD/out/$PROG"
+
+init_dir "$STDOUT_DIR"
+
 
 COMMON="$WORKER_DIR/common.sh"
 
@@ -20,4 +28,4 @@ else
   exit 1
 fi
 
-sbatch $WORKER_DIR/run-bowtie2-build.sh
+sbatch -o $STDOUT_DIR/bowtie2-build.out $WORKER_DIR/run-bowtie2-build.sh
