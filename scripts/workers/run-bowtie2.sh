@@ -57,13 +57,14 @@ while read FASTA; do
     fi
 
     #-k 1 means only get one alignment per read
-    #--no-hd means no header lines
+    #--no-sq means no sequence header lines (but still has a header 
+    # which is important for samtools)
     #--no-unal means don't keep any unaligned reads
 
     bowtie2 -p 12 \
         --very-sensitive-local \
         -f \
-        --no-hd \
+        --no-sq \
         -k 1 \
         --no-unal \
         -x $BOWTIE2_DB \
