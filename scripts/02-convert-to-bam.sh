@@ -8,7 +8,6 @@ unset module
 set -u
 source ./config.sh
 export CWD="$PWD"
-export STEP_SIZE=100 #adjust as needed
 
 echo Setting up log files...
 PROG=`basename $0 ".sh"`
@@ -24,6 +23,7 @@ find $BOWTIE2_OUT_DIR -iname \*.sam > $FILE_LIST
 export NUM_FILES=$(lc $FILE_LIST)
 
 echo \"Found $NUM_FILES to make bams from\"
+echo \"Splitting them up in batches of "$STEP_SIZE"\"
 
 echo Making output dir...
 if [ ! -d $BAM_OUT_DIR ]; then
@@ -32,10 +32,11 @@ fi
 
 echo Submitting job...
 
-JOB=$(qsub -J 1-$NUM_FILES:$STEP_SIZE -V -N makebam -j oe -o "$STDOUT_DIR" $WORKER_DIR/make-bams.pbs)
+let i=1
 
-if [ $? -eq 0 ]; then
-  echo Submitted job \"$JOB\" for you. Weeeeee!
-else
-  echo -e "\nError submitting job\n$JOB\n"
-fi
+while (( "$i" < "$NUM_FILES" )); do
+    export FILE_START=$i
+    echo Doing file $i plus 9 more if possible
+    sbatch -o $STDOUT_DIR/run-bowtie2.out.$i $WORKER_DIR/make-bams.sh
+    (( i += 10 ))
+done
