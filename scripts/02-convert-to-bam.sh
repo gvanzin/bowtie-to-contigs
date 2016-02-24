@@ -59,6 +59,6 @@ let i=1
 while (( "$i" <= "$NUM_FILES" )); do
     export FILE_START=$i
     echo Doing file $i plus 9 more if possible
-    sbatch -o $STDOUT_DIR/run-bowtie2.out.$i $WORKER_DIR/make-bams.sh
+    sbatch -o $STDOUT_DIR/make-bams-out.$i $WORKER_DIR/make-bams.sh
     (( i += $STEP_SIZE ))
 done

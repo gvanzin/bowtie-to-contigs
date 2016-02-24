@@ -59,12 +59,11 @@ echo \"Found $NUM_FILES to process\"
 
 echo \"Splitting them up in batches of "$STEP_SIZE"\"
 
-#TODO: make this array figure out how many files there are
-# split up by STEP_SIZE and create an array
-array=(101)
-#1 11 21 31 41 51 61 71 81 91 
-for i in "${array[@]}"; do
+let i=1
+
+while (( "$i" <= "$NUM_FILES" )); do
     export FILE_START=$i
     echo Doing file $i plus 9 more if possible
-    sbatch -o $STDOUT_DIR/run-bowtie2.out.$i $WORKER_DIR/run-bowtie2.sh
+    sbatch --dependency=afterok:6613510 -o $STDOUT_DIR/run-bowtie2.out.$i $WORKER_DIR/run-bowtie2.sh
+    (( i += $STEP_SIZE )) 
 done

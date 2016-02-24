@@ -1,19 +1,24 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-#PBS -W group_list=bhurwitz
-#PBS -q standard
-#PBS -l jobtype=cluster_only
-#PBS -l select=1:ncpus=6:mem=11gb
-#PBS -l pvmem=22gb
-#PBS -l place=pack:shared
-#PBS -l walltime=24:00:00
-#PBS -l cput=24:00:00
-#PBS -o out/
-#PBS -e out/
-#PBS -M scottdaniel@email.arizona.edu
-#PBS -m bea
+#SBATCH -J anvi-pop-genes           # Job name
+#SBATCH -o ./out/anvi-pop-genes.%j.out    # Specify stdout output file (%j expands to jobId)
+#SBATCH -p normal           # Queue name
+#SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
+#SBATCH -n 16                     # Total number of tasks
+#SBATCH -t 24:00:00              # Run time (hh:mm:ss) - 1.5 hours
+#SBATCH --mail-user=scottdaniel@email.arizona.edu
+#SBATCH --mail-type=all
+#SBATCH -A iPlant-Collabs         # Specify allocation to charge against
 
-cd $PBS_O_WORKDIR
+#automagic offloading for the xeon phi co-processor
+#in case anything uses Intel's Math Kernel Library
+export MKL_MIC_ENABLE=1
+export OMP_NUM_THREADS=16
+export MIC_OMP_NUM_THREADS=240
+export OFFLOAD_REPORT=2
+
+module load hdf5
+
 CONFIG="./config.sh"
 
 if [ -e $CONFIG ]; then
@@ -33,8 +38,8 @@ else
 fi
 
 cd $CONTIG_DIR
-#anvi-gen-contigs-database -f final_contigs.fasta -o anvi-contigs.db
-svr_assign_to_dna_using_figfams < final_contigs.fasta > svr_assign_to_dna_using_figfams.txt
-anvi-populate-genes-table -c anvi-contigs.db -p myrast_cmdline_dont_use -i svr_assign_to_dna_using_figfams.txt
-anvi-export-genes-table -c anvi-contigs.db -o rast_annotation.txt
+#anvi-gen-contigs-database -f $CONTIGS -o $ANVI_CONTIG_DB
+svr_assign_to_dna_using_figfams < $CONTIGS > svr_assign_to_dna_using_figfams.txt
+anvi-populate-genes-table -c $ANVI_CONTIG_DB -p myrast_cmdline_dont_use -i svr_assign_to_dna_using_figfams.txt
+anvi-export-genes-table -c $ANVI_CONTIG_DB -o rast_annotation.txt
 
