@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH -p normal           # Queue name
-#SBATCH -J merge-bams
+#SBATCH -J init-bams
 #SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
 #SBATCH -n 16                     # Total number of tasks
 #SBATCH -t 24:00:00              # Run time (hh:mm:ss) - 1.5 hours
@@ -28,21 +28,9 @@ else
   exit 1
 fi
 
-TMP_FILES=$(mktemp)
-
-find $BAM_OUT_DIR -iname \*$SAMPLE\*.bam > $TMP_FILES
-
-NUM_FILES=$(lc $TMP_FILES)
-
-echo Found \"$NUM_FILES\" bams to merge
-
-NEW_FILE="$SAMPLE".bam
-
-if [[ ! -s $FINAL_BAM_DIR/$SAMPLE.bam ]]; then
-    echo Merging multiple bams into "$SAMPLE".bam
-    rm $FINAL_BAM_DIR/$SAMPLE.bam
-    samtools merge -@ 16 -b $TMP_FILES $FINAL_BAM_DIR/$SAMPLE.bam
-    mv $SAMPLE.bam $SAMPLE.raw.bam
+if [[ ! -s $FINAL_BAM_DIR/$SAMPLE.bam.bai ]]; then
+    echo Initializing "$SAMPLE".bam for anvio
+    anvi-init-bam "$SAMPLE".raw.bam -O $SAMPLE
 else
     echo $SAMPLE already done
 fi
