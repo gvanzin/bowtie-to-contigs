@@ -40,6 +40,7 @@ NEW_FILE="$SAMPLE".bam
 
 if [[ ! -s $FINAL_BAM_DIR/$SAMPLE.bam ]]; then
     echo Merging multiple bams into "$SAMPLE".bam
+    #deleting it in case its a zero-length file
     rm $FINAL_BAM_DIR/$SAMPLE.bam
     samtools merge -@ 16 -b $TMP_FILES $FINAL_BAM_DIR/$SAMPLE.bam
     mv $SAMPLE.bam $SAMPLE.raw.bam

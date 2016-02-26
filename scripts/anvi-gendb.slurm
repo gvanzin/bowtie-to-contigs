@@ -17,8 +17,6 @@ export OMP_NUM_THREADS=16
 export MIC_OMP_NUM_THREADS=240
 export OFFLOAD_REPORT=2
 
-pwd
-
 module load hdf5
 
 CONFIG="./config.sh"

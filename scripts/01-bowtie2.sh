@@ -61,9 +61,12 @@ echo \"Splitting them up in batches of "$STEP_SIZE"\"
 
 let i=1
 
+#Put this in the sbatch command if its dependant on another %jobid
+#--dependency=afterok:6613510 
+
 while (( "$i" <= "$NUM_FILES" )); do
     export FILE_START=$i
     echo Doing file $i plus 9 more if possible
-    sbatch --dependency=afterok:6613510 -o $STDOUT_DIR/run-bowtie2.out.$i $WORKER_DIR/run-bowtie2.sh
+    sbatch -o $STDOUT_DIR/run-bowtie2.out.$i $WORKER_DIR/run-bowtie2.sh
     (( i += $STEP_SIZE )) 
 done

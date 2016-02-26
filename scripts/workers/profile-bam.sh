@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH -p normal           # Queue name
-#SBATCH -J init-bams
+#SBATCH -J profile-bams
 #SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
 #SBATCH -n 16                     # Total number of tasks
 #SBATCH -t 24:00:00              # Run time (hh:mm:ss) - 1.5 hours
@@ -30,11 +30,10 @@ fi
 
 cd $FINAL_BAM_DIR
 
-if [[ ! -s $FINAL_BAM_DIR/$SAMPLE.bam.bai ]]; then
-    echo Initializing "$SAMPLE".bam for anvio
-    anvi-init-bam "$SAMPLE".raw.bam -O $SAMPLE
+if [[ ! -e $SAMPLE.bam.bai ]]; then
+    echo "Anvi-init-bam didnt work right"
 else
-    echo $SAMPLE already done
+    anvi-profile -i $SAMPLE.bam -M 1071 -c $ANVI_CONTIG_DB
 fi
 
 echo Done at $(date)
