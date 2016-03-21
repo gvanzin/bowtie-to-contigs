@@ -30,11 +30,11 @@ fi
 
 echo "Checking which ones are done already..."
 
-if [ -e "$PRJ_DIR/files_to_process" ]; then
-    rm $PRJ_DIR/files_to_process
+if [ -e "$PRJ_DIR/files-to-process" ]; then
+    rm $PRJ_DIR/files-to-process
 fi
 
-export FILES_TO_PROCESS="$PRJ_DIR/files_to_process"
+export FILES_TO_PROCESS="$PRJ_DIR/files-to-process"
 
 while read FILE; do
 
@@ -53,12 +53,12 @@ export NUM_FILES=$(lc $FILES_TO_PROCESS)
 echo \"Found $NUM_FILES to make bams from\"
 echo \"Splitting them up in batches of "$STEP_SIZE"\"
 echo Submitting job...
-
+ 
 let i=1
 
 while (( "$i" <= "$NUM_FILES" )); do
     export FILE_START=$i
     echo Doing file $i plus 9 more if possible
-    sbatch --dependency=afterok:6613766 -o $STDOUT_DIR/make-bams-out.$i $WORKER_DIR/make-bams.sh
+    sbatch -o $STDOUT_DIR/make-bams-out.$i $WORKER_DIR/make-bams.sh
     (( i += $STEP_SIZE ))
 done

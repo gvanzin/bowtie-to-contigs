@@ -28,8 +28,8 @@ export RIGHT_FILES_LIST="$PRJ_DIR/right_fastqs"
 
 echo "Finding fastq's"
 
-find . -type f -iname \*R1\*.fastq | sed "s/^\.\///" | sort > $LEFT_FILES_LIST 
-find . -type f -iname \*R2\*.fastq | sed "s/^\.\///" | sort > $RIGHT_FILES_LIST 
+find . -type f -iname \*.1.fastq | sed "s/^\.\///" | sort > $LEFT_FILES_LIST 
+find . -type f -iname \*.2.fastq | sed "s/^\.\///" | sort > $RIGHT_FILES_LIST 
 
 echo "Checking if already processed"
 
@@ -38,6 +38,8 @@ if [ -e $PRJ_DIR/files-to-process ]; then
 fi
 
 export FILES_TO_PROCESS="$PRJ_DIR/files-to-process"
+
+#Just naming the out directories according to the left read file
 
 while read FASTQ; do
  

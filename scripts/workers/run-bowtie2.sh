@@ -48,12 +48,14 @@ while read LEFT_FASTQ; do
 
     while read RIGHT_FASTQ; do
 
-        test2=$(echo $RIGHT_FASTQ | sed s/R[1-2]//)
-        test1=$(echo $LEFT_FASTQ | sed s/R[1-2]//)
+        test2=$(echo $RIGHT_FASTQ | sed 's/\.[1-2]\.fastq//')
+        test1=$(echo $LEFT_FASTQ | sed 's/\.[1-2]\.fastq//')
 
         if [ "$test1" = "$test2" ]; then
             IN_LEFT=$FASTQ_DIR/$LEFT_FASTQ
             IN_RIGHT=$FASTQ_DIR/$RIGHT_FASTQ
+            IN_L_UNP=$FASTQ_DIR/"$test1".nomatch1.fastq
+            IN_R_UNP=$FASTQ_DIR/"$test2".nomatch2.fastq
            
             OUT_DIR=$BOWTIE2_OUT_DIR/$(dirname $LEFT_FASTQ)
 
@@ -78,6 +80,7 @@ while read LEFT_FASTQ; do
                 -x $BOWTIE2_DB \
                 -1 $IN_LEFT \
                 -2 $IN_RIGHT \
+                -U "$IN_L_UNP","$IN_R_UNP" \
                 -S $OUT
         else
             continue

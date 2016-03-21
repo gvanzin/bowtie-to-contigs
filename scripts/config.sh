@@ -12,9 +12,9 @@ export COMMON_DIR="/work/03859/sdaniel"
 export PRJ_DIR="$COMMON_DIR/bowtie-to-contigs"
 
 #input contigs / also where bowtie2db will be
-export CONTIG_DIR="$COMMON_DIR/spades_output/K21"
-export CONTIGS="$CONTIG_DIR/filtered_contigs.fasta"
-export BOWTIE2_DB="$CONTIG_DIR/filtered_contigs"
+export CONTIG_DIR="$COMMON_DIR/megahit_output"
+export CONTIGS="$CONTIG_DIR/final.contigs.fa"
+export BOWTIE2_DB="$CONTIG_DIR/final.contigs"
 export ANVI_CONTIG_DB="$CONTIG_DIR/anvi-contig.db"
 
 #input fasta
@@ -26,7 +26,7 @@ export SPLIT_FA_DIR="$COMMON_DIR/split_fasta"
 #export SPLIT_FA_DIR="$PRJ_DIR/fasta-split"
 
 #place that original fastq's are
-export FASTQ_DIR="$COMMON_DIR/fastq"
+export FASTQ_DIR="/work/03859/sdaniel/fastq-taxoner-patric/sort-and-merged"
 
 #place to store split up fastq's for searching later
 export SPLIT_FQ_DIR="$PRJ_DIR/split-fastq"

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #
-# This script is intended to make bams from sams and then sort
+# This script is intended to merge bams 
 #
 
 unset module
@@ -35,7 +35,11 @@ fi
 
 export SAMPLES_TO_PROCESS="$PRJ_DIR/samples_to_process"
 
-echo Checking samples $(cat $SAMPLE_NAMES)
+if [[ -e $SAMPLE_NAMES ]]; then
+    echo Checking samples $(cat $SAMPLE_NAMES)
+else
+    echo "Did you forget to create a sample name file and define it in config.sh?"
+fi
 
 while read SAMPLE; do
 
