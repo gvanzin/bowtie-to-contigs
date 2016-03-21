@@ -39,11 +39,21 @@ echo Found \"$NUM_FILES\" bams to merge
 NEW_FILE="$SAMPLE".bam
 
 if [[ ! -s $FINAL_BAM_DIR/$SAMPLE.bam ]]; then
+    
+    echo "deleting "$SAMPLE.bam" in case its a bad file"
+    
+    rm $FINAL_BAM_DIR/$SAMPLE.bam &> /dev/null
+    if [[ $? -eq 0 ]]; then
+        echo "Deleted bam and making new one"
+    else
+        echo "BAM isn't there and that's ok"
+    fi
+
     echo Merging multiple bams into "$SAMPLE".bam
-    #deleting it in case its a zero-length file
-    rm $FINAL_BAM_DIR/$SAMPLE.bam
     samtools merge -@ 16 -b $TMP_FILES $FINAL_BAM_DIR/$SAMPLE.bam
-    mv $SAMPLE.bam $SAMPLE.raw.bam
+    
+    echo "Renaming to "$SAMPLE".raw.bam"
+    mv $FINAL_BAM_DIR/$SAMPLE.bam $FINAL_BAM_DIR/$SAMPLE.raw.bam
 else
     echo $SAMPLE already done
 fi
