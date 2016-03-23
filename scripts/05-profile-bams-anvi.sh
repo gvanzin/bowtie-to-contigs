@@ -33,6 +33,19 @@ export SAMPLES_TO_PROCESS="$PRJ_DIR/samples_to_process"
 
 echo Checking samples $(cat $SAMPLE_NAMES)
 
+echo Checking that number of contigs is less than 20k
+
+echo "Minimum contig size is "$MIN_CONTIG_SIZE""
+
+TOTAL_CONTIGS=$(sqlite3 $ANVI_CONTIG_DB "select count(*) from contigs_basic_info where length > "$MIN_CONTIG_SIZE";")
+
+if [[ $TOTAL_CONTIGS -gt "20000" ]]; then
+    echo Number of contigs "$TOTAL_CONTIGS" is too big, change it in config.sh
+    exit 1
+else
+    echo Number of contigs is "$TOTAL_CONTIGS" ... proceeding ...
+fi
+
 while read SAMPLE; do
 
     #all this does is check for a profile.db it doesn't
@@ -53,10 +66,11 @@ echo \"Found $NUM_SAMPLES to profile with anvio\"
 echo Submitting job...
 
 let i=1
-
+#use the following line after sbatch if you want it to happen after job_id
+#--dependency=afterok:6619721 
 while read SAMPLE; do
     export SAMPLE
     echo Doing sample $SAMPLE 
-    sbatch --dependency=afterok:6619721 -o $STDOUT_DIR/profile-bam.out.$i $WORKER_DIR/profile-bam.sh
+    sbatch -o $STDOUT_DIR/profile-bam.out.$i $WORKER_DIR/profile-bam.sh
     (( i += 1 ))
 done < "$SAMPLES_TO_PROCESS"

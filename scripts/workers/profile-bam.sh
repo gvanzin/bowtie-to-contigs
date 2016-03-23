@@ -33,7 +33,7 @@ cd $FINAL_BAM_DIR
 if [[ ! -e $SAMPLE.bam.bai ]]; then
     echo "Anvi-init-bam didnt work right"
 else
-    anvi-profile -i $SAMPLE.bam -M 1071 -c $ANVI_CONTIG_DB
+    anvi-profile -i $SAMPLE.bam -M $MIN_CONTIG_SIZE -c $ANVI_CONTIG_DB
 fi
 
 echo Done at $(date)

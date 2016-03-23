@@ -17,6 +17,9 @@ export CONTIGS="$CONTIG_DIR/final.contigs.fa"
 export BOWTIE2_DB="$CONTIG_DIR/final.contigs"
 export ANVI_CONTIG_DB="$CONTIG_DIR/anvi-contig.db"
 
+#minimum contig size to get total contigs down to 20k
+export MIN_CONTIG_SIZE="1696"
+
 #input fasta
 #export FASTA_DIR="$PRJ_DIR/fasta"
 #export FASTA_DIR="/gsfs1/rsgrps/bhurwitz/kyclark/mouse/data/screened"
