@@ -7,7 +7,7 @@
 set -u
 source ./config.sh
 export CWD="$PWD"
-export STEP_SIZE=100
+export STEP_SIZE=10
 
 PROG=`basename $0 ".sh"`
 #Just going to put stdout and stderr together into stdout
@@ -21,13 +21,15 @@ else
     mkdir -p "$BOWTIE2_OUT_DIR"
 fi
 
-cd "$SPLIT_FA_DIR"
+cd "$FASTQ_DIR"
 
-export FILES_LIST="$PRJ_DIR/split-files"
+export LEFT_FILES_LIST="$PRJ_DIR/left_fastqs"
+export RIGHT_FILES_LIST="$PRJ_DIR/right_fastqs"
 
-echo "Finding fasta's"
+echo "Finding fastq's"
 
-find . -type f -iname \*.fa | sed "s/^\.\///" > $FILES_LIST 
+find . -type f -iname \*.1.fastq | sed "s/^\.\///" | sort > $LEFT_FILES_LIST 
+find . -type f -iname \*.2.fastq | sed "s/^\.\///" | sort > $RIGHT_FILES_LIST 
 
 echo "Checking if already processed"
 
@@ -37,28 +39,36 @@ fi
 
 export FILES_TO_PROCESS="$PRJ_DIR/files-to-process"
 
-while read FASTA; do
- 
-    OUT_DIR=$BOWTIE2_OUT_DIR/$(dirname $FASTA)
+#Just naming the out directories according to the left read file
 
-    OUT=$OUT_DIR/$(basename $FASTA ".fa").sam
+while read FASTQ; do
+ 
+    OUT_DIR=$BOWTIE2_OUT_DIR/$(dirname $FASTQ)
+
+    OUT=$OUT_DIR/$(basename $FASTQ ".fa").sam
 
     if [[ -e $OUT ]]; then
         continue
     else
-        echo $FASTA >> $FILES_TO_PROCESS
+        echo $FASTQ >> $FILES_TO_PROCESS
     fi
 
-done < $FILES_LIST
+done < $LEFT_FILES_LIST
 
 NUM_FILES=$(lc $FILES_TO_PROCESS)
 
 echo \"Found $NUM_FILES to process\"
 
-JOB=$(qsub -J 1-$NUM_FILES:$STEP_SIZE -v PRJ_DIR,STEP_SIZE,WORKER_DIR,FILES_TO_PROCESS,SPLIT_FA_DIR,BOWTIE2_OUT_DIR -N bowtie2 -j oe -o "$STDOUT_DIR" $WORKER_DIR/run-bowtie2.sh)
+echo \"Splitting them up in batches of "$STEP_SIZE"\"
 
-if [ $? -eq 0 ]; then
-  echo Submitted job \"$JOB\" for you in steps of \"$STEP_SIZE.\" Remember: sholders back, chin tucked in, tongue on roof of mouth, deep belly breaths.
-else
-  echo -e "\nError submitting job\n$JOB\n"
-fi
+let i=1
+
+#Put this in the sbatch command if its dependant on another %jobid
+#--dependency=afterok:6613510 
+
+while (( "$i" <= "$NUM_FILES" )); do
+    export FILE_START=$i
+    echo Doing file $i plus 9 more if possible
+    sbatch -o $STDOUT_DIR/run-bowtie2.out.$i $WORKER_DIR/run-bowtie2.sh
+    (( i += $STEP_SIZE )) 
+done

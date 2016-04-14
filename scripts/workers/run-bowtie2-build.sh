@@ -1,28 +1,22 @@
 #!/bin/bash
-
-#PBS -W group_list=bhurwitz
-#PBS -q standard
-#PBS -l jobtype=cluster_only
-#PBS -l select=1:ncpus=6:mem=11gb
-#PBS -l pvmem=22gb
-#PBS -l place=pack:shared
-#PBS -l walltime=48:00:00
-#PBS -l cput=48:00:00
-#PBS -M scottdaniel@email.arizona.edu
-#PBS -m bea
-
-cd $PBS_O_WORKDIR
+#SBATCH -J bowtie2build           # Job name
+#SBATCH -p serial           # Queue name
+#SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
+#SBATCH -n 16                     # Total number of tasks
+#SBATCH -t 12:00:00              # Run time (hh:mm:ss) - 1.5 hours
+#SBATCH --mail-user=scottdaniel@email.arizona.edu
+#SBATCH --mail-type=all
+#SBATCH -A iPlant-Collabs         # Specify allocation to charge against
 
 set -u
 
-module load bowtie2
+module load perl
+module load bowtie
 
 echo "Started at $(date) on host $(hostname)"
 
-source /usr/share/Modules/init/bash
-
 echo "Bowtie2 indexing..."
 
-bowtie2-build final_contigs.fasta final_contigs
+bowtie2-build $CONTIGS $BOWTIE2_DB
 
 echo "Done $(date)"

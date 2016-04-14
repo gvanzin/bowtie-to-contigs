@@ -41,4 +41,12 @@ makedb-files-to-process
 high-qual-count-out
 curl_output.txt
 high-qual-files
+bam-out/
+bam_files
+bams-for-anvi/
+files_to_process
+left_fastqs
+right_fastqs
 sam_files
+sample-names
+samples_to_process

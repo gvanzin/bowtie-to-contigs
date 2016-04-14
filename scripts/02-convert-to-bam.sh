@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env bash
 
 #
@@ -46,3 +47,4 @@ if [ $? -eq 0 ]; then
 else
   echo -e "\nError submitting job\n$JOB\n"
 fi
+
