@@ -6,8 +6,15 @@
 
 unset module
 set -u
-source ./config.sh
-export CWD="$PWD"
+
+CONFIG="./config.sh"
+
+if [[ -e $CONFIG ]]; then
+    source $CONFIG
+else
+    echo "Can't source $CONFIG"
+    exit 1
+fi
 export STEP_SIZE=100 #adjust as needed
 
 echo Setting up log files...
@@ -17,11 +24,11 @@ STDOUT_DIR="$CWD/out/$PROG"
 
 init_dir "$STDOUT_DIR"
 
-FILE_LIST="$PRJ_DIR/sam_files"
+export SAM_FILE_LIST="$PRJ_DIR/sam_files"
 
-find $BOWTIE2_OUT_DIR -iname \*.sam > $FILE_LIST
+find $BOWTIE2_OUT_DIR -iname \*.sam > $SAM_FILE_LIST
 
-export NUM_FILES=$(lc $FILE_LIST)
+export NUM_FILES=$(lc $SAM_FILE_LIST)
 
 echo \"Found $NUM_FILES to make bams from\"
 

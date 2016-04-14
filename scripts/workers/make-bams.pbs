@@ -12,15 +12,12 @@
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m bea
 
-cd $PBS_O_WORKDIR
+source /usr/share/Modules/init/bash
 
-CONFIG="$PRJ_DIR/scripts/config.sh"
+set -u
 
-if [ -e $CONFIG ]; then
-    . "$CONFIG"
-else
-    echo Missing config \"$CONFIG\"
-    exit 1
+if [[ "$PBS_ARRAY_INDEX" = 5301 ]]; then
+    set -x
 fi
 
 COMMON="$WORKER_DIR/common.sh"
@@ -34,20 +31,27 @@ fi
 
 TMP_FILES=$(mktemp)
 
-get_lines $FILE_LIST $TMP_FILES $PBS_ARRAY_INDEX $STEP_SIZE
+get_lines $SAM_FILE_LIST $TMP_FILES $PBS_ARRAY_INDEX $STEP_SIZE
 
 NUM_FILES=$(lc $TMP_FILES)
 
 echo Found \"$NUM_FILES\" files to process
 
 while read FILE; do
-    if [[ ! -s $BAM_OUT_DIR/$FILE.bam ]]; then
-        echo Converting and sorting \'sam\'s in $FILE.sam
-        samtools view -bT $BOWTIE2_DB.fasta $FILE \
-            | samtools sort - \
-            > $BAM_OUT_DIR/$FILE.bam
+
+    NEW_FILE=$(basename $FILE ".fastq.sam")
+
+    if [[ ! -s $BAM_OUT_DIR/$NEW_FILE.bam ]]; then
+        echo Converting and sorting \'sam\'s in $FILE
+        samtools view -bT $BOWTIE2_DB.fasta $FILE | samtools sort - > $BAM_OUT_DIR/$NEW_FILE.bam
     else
-        echo $SHORT_NAME already done
+        echo $FILE already done
     fi
-done < $TMP_FILES
+done < "$TMP_FILES"
+
+if [[ "$PBS_ARRAY_INDEX" = 5301 ]]; then
+    python $HOME/mailsender.py
+fi
+
+    
 
