@@ -12,13 +12,13 @@ export COMMON_DIR="/work/03859/sdaniel"
 export PRJ_DIR="$COMMON_DIR/bowtie-to-contigs"
 
 #input contigs / also where bowtie2db will be
-export CONTIG_DIR="$COMMON_DIR/megahit_output"
-export CONTIGS="$CONTIG_DIR/final.contigs.fa"
-export BOWTIE2_DB="$CONTIG_DIR/final.contigs"
+export CONTIG_DIR="$COMMON_DIR/custom_patric_genome"
+export CONTIGS="$CONTIG_DIR/contigs.fa"
+export BOWTIE2_DB="$CONTIG_DIR/contigs"
 export ANVI_CONTIG_DB="$CONTIG_DIR/anvi-contig.db"
 
 #minimum contig size to get total contigs down to 20k
-export MIN_CONTIG_SIZE="1696"
+export MIN_CONTIG_SIZE="3000" #guess right now
 
 #input fasta
 #export FASTA_DIR="$PRJ_DIR/fasta"

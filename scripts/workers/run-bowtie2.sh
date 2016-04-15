@@ -8,6 +8,13 @@
 #SBATCH --mail-type=all
 #SBATCH -A iPlant-Collabs         # Specify allocation to charge against
 
+#automagic offloading for the xeon phi co-processor
+#in case anything uses Intel's Math Kernel Library
+export MKL_MIC_ENABLE=1
+export OMP_NUM_THREADS=16
+export MIC_OMP_NUM_THREADS=240
+export OFFLOAD_REPORT=2
+
 set -u
 
 module load perl

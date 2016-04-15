@@ -69,6 +69,6 @@ let i=1
 while (( "$i" <= "$NUM_FILES" )); do
     export FILE_START=$i
     echo Doing file $i plus 9 more if possible
-    sbatch -o $STDOUT_DIR/run-bowtie2.out.$i $WORKER_DIR/run-bowtie2.sh
+    sbatch --dependency=afterok:6885850 -o $STDOUT_DIR/run-bowtie2.out.$i $WORKER_DIR/run-bowtie2.sh
     (( i += $STEP_SIZE )) 
 done
