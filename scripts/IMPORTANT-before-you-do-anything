@@ -1,0 +1,6 @@
+You must edit the regex in 0001-fix-deflines.sh to get rid of all the unnecessary characters in the defines of your contig.fa
+
+see here:
+However, your FASTA file must have simple deflines, and if it doesn’t have simple deflines, you must fix your FASTA file prior to mapping. This is necessary, because the names in contigs.fa must match the names in your BAM files. But ynfortunately, different mapping software behave differently when they find a space character, or say a | in your target FASTA file, and they proceed to change those characters. Therefore it is essential to keep the sequence IDs in this file as simple as possible before mapping. To avoid any problems later, take a look at your deflines prior to mapping now, and remove anything that is not a digit, an ASCII letter, an underscore, or a dash character.
+
+from http://merenlab.org/2015/05/02/anvio-tutorial/#preparation
