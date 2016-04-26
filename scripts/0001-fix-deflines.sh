@@ -9,4 +9,6 @@ else
     exit 12385
 fi
 
-sed -i -e 's/ .*\. //g' -e 's/[\[]//g' -e 's/\]//g' -e 's/\s/-/g' -e 's/>accn|/>accn-/g' -e 's/|//g' $CONTIGS
+
+
+#sed -i -e 's/ .*\. //g' -e 's/[\[]//g' -e 's/\]//g' -e 's/\s/-/g' -e 's/>accn|/>accn-/g' -e 's/|//g' $CONTIGS

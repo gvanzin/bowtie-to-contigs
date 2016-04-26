@@ -12,7 +12,7 @@ export COMMON_DIR="/work/03859/sdaniel"
 export PRJ_DIR="$COMMON_DIR/bowtie-to-contigs"
 
 #input contigs / also where bowtie2db will be
-export CONTIG_DIR="$COMMON_DIR/custom_patric_genome"
+export CONTIG_DIR="$COMMON_DIR/megahit_output_dedup"
 export CONTIGS="$CONTIG_DIR/contigs.fa"
 export BOWTIE2_DB="$CONTIG_DIR/contigs"
 export ANVI_CONTIG_DB="$CONTIG_DIR/anvi-contig.db"
