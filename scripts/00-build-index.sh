@@ -27,5 +27,5 @@ else
   echo Missing common \"$COMMON\"
   exit 1
 fi
-
-sbatch --dependency=afterok:6890670 -o $STDOUT_DIR/bowtie2-build.out $WORKER_DIR/run-bowtie2-build.sh
+#--dependency=afterok:6890670 
+sbatch -o $STDOUT_DIR/bowtie2-build.out $WORKER_DIR/run-bowtie2-build.sh
