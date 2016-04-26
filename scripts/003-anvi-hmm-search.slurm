@@ -2,9 +2,9 @@
 
 #SBATCH -J anvi-hmm-search           # Job name
 #SBATCH -o ./out/anvi-hmm-search.%j.out    # Specify stdout output file (%j expands to jobId)
-#SBATCH -p normal           # Queue name
+#SBATCH -p largemem           # Queue name
 #SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
-#SBATCH -n 16                     # Total number of tasks
+#SBATCH -n 32                     # Total number of tasks
 #SBATCH -t 24:00:00              # Run time (hh:mm:ss) - 1.5 hours
 #SBATCH --mail-user=scottdaniel@email.arizona.edu
 #SBATCH --mail-type=all
@@ -13,8 +13,8 @@
 #automagic offloading for the xeon phi co-processor
 #in case anything uses Intel's Math Kernel Library
 export MKL_MIC_ENABLE=1
-export OMP_NUM_THREADS=16
-export MIC_OMP_NUM_THREADS=240
+export OMP_NUM_THREADS=32
+export MIC_OMP_NUM_THREADS=480
 export OFFLOAD_REPORT=2
 
 module load hdf5
