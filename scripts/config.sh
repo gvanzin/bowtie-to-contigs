@@ -18,7 +18,7 @@ export BOWTIE2_DB="$CONTIG_DIR/contigs"
 export ANVI_CONTIG_DB="$CONTIG_DIR/anvi-contig.db"
 
 #minimum contig size to get total contigs down to 20k
-export MIN_CONTIG_SIZE="3000" #guess right now
+export MIN_CONTIG_SIZE="2093" #for current megahit_large_dedup contigs
 
 #input fasta
 #export FASTA_DIR="$PRJ_DIR/fasta"
