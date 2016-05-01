@@ -3,7 +3,7 @@
 #SBATCH -p largemem           # Queue name
 #SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
 #SBATCH -n 32                     # Total number of tasks
-#SBATCH -t 48:00:00              # Run time (hh:mm:ss) - 1.5 hours
+#SBATCH -t 24:00:00              # Run time (hh:mm:ss) - 1.5 hours
 #SBATCH --mail-user=scottdaniel@email.arizona.edu
 #SBATCH --mail-type=all
 #SBATCH -A iPlant-Collabs         # Specify allocation to charge against
