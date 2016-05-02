@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 #all this does is launch bowite2-build for you
+unset module
 set -u
 export CWD="$PWD"
 CONFIG="./config.sh"
@@ -28,4 +29,12 @@ else
   exit 1
 fi
 
-sbatch -o $STDOUT_DIR/bowtie2-build.out $WORKER_DIR/run-bowtie2-build.sh
+JOB=$(qsub -V -N bowtie2-build -j oe -o "$STDOUT_DIR" $WORKER_DIR/run-bowtie2-build.sh)
+
+if [ $? -eq 0 ]; then
+    echo Submitted job \"$JOB\" for you. Weeeeeeeeeeeee!
+else
+    echo -e "\nError submitting job\n$JOB\n"
+fi
+
+

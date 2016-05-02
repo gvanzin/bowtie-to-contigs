@@ -1,21 +1,16 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-#SBATCH -J anvi-hmm-search           # Job name
-#SBATCH -o ./out/anvi-hmm-search.%j.out    # Specify stdout output file (%j expands to jobId)
-#SBATCH -p largemem           # Queue name
-#SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
-#SBATCH -n 32                     # Total number of tasks
-#SBATCH -t 24:00:00              # Run time (hh:mm:ss) - 1.5 hours
-#SBATCH --mail-user=scottdaniel@email.arizona.edu
-#SBATCH --mail-type=all
-#SBATCH -A iPlant-Collabs         # Specify allocation to charge against
+#PBS -W group_list=bhurwitz
+#PBS -q standard
+#PBS -l jobtype=cluster_only
+#PBS -l select=1:ncpus=2:mem=3gb:pcmem=2gb
+#PBS -l pvmem=6gb
+#PBS -l walltime=24:10:00
+#PBS -l cput=24:10:00
+#PBS -M scottdaniel@email.arizona.edu
+#PBS -m bea
 
-#automagic offloading for the xeon phi co-processor
-#in case anything uses Intel's Math Kernel Library
-export MKL_MIC_ENABLE=1
-export OMP_NUM_THREADS=32
-export MIC_OMP_NUM_THREADS=480
-export OFFLOAD_REPORT=2
+cd $PBS_O_WORKDIR
 
 module load hdf5
 
