@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env bash
 
 #
@@ -6,9 +7,16 @@
 
 unset module
 set -u
-source ./config.sh
-export CWD="$PWD"
-export STEP_SIZE=10
+
+CONFIG="./config.sh"
+
+if [[ -e $CONFIG ]]; then
+    source $CONFIG
+else
+    echo "Can't source $CONFIG"
+    exit 1
+fi
+export STEP_SIZE=100 #adjust as needed
 
 echo Setting up log files...
 PROG=`basename $0 ".sh"`
@@ -17,48 +25,26 @@ STDOUT_DIR="$CWD/out/$PROG"
 
 init_dir "$STDOUT_DIR"
 
-export FILE_LIST="$PRJ_DIR/sam_files"
+export SAM_FILE_LIST="$PRJ_DIR/sam_files"
 
-find $BOWTIE2_OUT_DIR -iname \*.sam > $FILE_LIST
+find $BOWTIE2_OUT_DIR -iname \*.sam > $SAM_FILE_LIST
 
-if [ ! -d $BAM_OUT_DIR ]; then
-    mkdir -p $BAM_OUT_DIR
-    echo "Making output dir..."
-else
-    echo "Continuing where you left off..."
-fi
-
-echo "Checking which ones are done already..."
-
-if [ -e "$PRJ_DIR/files-to-process" ]; then
-    rm $PRJ_DIR/files-to-process
-fi
-
-export FILES_TO_PROCESS="$PRJ_DIR/files-to-process"
-
-while read FILE; do
-
-    NEW_FILE=$(basename $FILE ".fastq.sam")
-    
-    if [[ ! -s $BAM_OUT_DIR/$NEW_FILE.bam  ]]; then
-        echo $FILE >> $FILES_TO_PROCESS
-    else
-        continue
-    fi
-
-done < "$FILE_LIST"
-
-export NUM_FILES=$(lc $FILES_TO_PROCESS)
+export NUM_FILES=$(lc $SAM_FILE_LIST)
 
 echo \"Found $NUM_FILES to make bams from\"
-echo \"Splitting them up in batches of "$STEP_SIZE"\"
-echo Submitting job...
- 
-let i=1
 
-while (( "$i" <= "$NUM_FILES" )); do
-    export FILE_START=$i
-    echo Doing file $i plus 9 more if possible
-    sbatch -o $STDOUT_DIR/make-bams-out.$i $WORKER_DIR/make-bams.sh
-    (( i += $STEP_SIZE ))
-done
+echo Making output dir...
+if [ ! -d $BAM_OUT_DIR ]; then
+    mkdir -p $BAM_OUT_DIR
+fi
+
+echo Submitting job...
+
+JOB=$(qsub -J 1-$NUM_FILES:$STEP_SIZE -V -N makebam -j oe -o "$STDOUT_DIR" $WORKER_DIR/make-bams.pbs)
+
+if [ $? -eq 0 ]; then
+  echo Submitted job \"$JOB\" for you. Weeeeee!
+else
+  echo -e "\nError submitting job\n$JOB\n"
+fi
+

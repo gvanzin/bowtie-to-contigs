@@ -49,6 +49,7 @@ get_lines $RIGHT_FILES_LIST $RIGHT_TMP_FILES $FILE_START $STEP_SIZE
 NUM_FILES=$(lc $LEFT_TMP_FILES)
 
 echo Found \"$NUM_FILES\" files to process
+
 echo Processing $(cat $LEFT_TMP_FILES) and $(cat $RIGHT_TMP_FILES)
 
 while read LEFT_FASTQ; do

@@ -35,7 +35,12 @@ export FASTQ_DIR="/work/03859/sdaniel/fastq-taxoner-patric/sort-and-merged"
 export SPLIT_FQ_DIR="$PRJ_DIR/split-fastq"
 
 #place to store bowtie2 results (step 01)
-export BOWTIE2_OUT_DIR="$PRJ_DIR/bowtie2-out"
+#export BOWTIE2_OUT_DIR="$PRJ_DIR/bowtie2-out"
+export BOWTIE2_OUT_DIR="$PRJ_DIR/bowtie2-out-for-anvi"
+
+#place to store cat'd sam -> bams (step 02-03)
+export BAM_OUT_DIR="$PRJ_DIR/bam-out"
+export FINAL_BAM_DIR="$PRJ_DIR/bams-for-anvi"
 
 #place to store bams (step 02-03)
 export BAM_OUT_DIR="$PRJ_DIR/bam-out"

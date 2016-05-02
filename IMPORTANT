@@ -1,0 +1,10 @@
+bowtie2-out is with
+--no-hd (no header)
+and
+--no-unal (no unaligned)
+and 
+--very-sensitive-local
+
+bowtie2-out-for-anvi is all of those plus
+-k 1
+which only gets one alignment per read, eliminating all inferior secondary alignment
