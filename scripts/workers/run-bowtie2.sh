@@ -1,35 +1,20 @@
-#!/bin/bash
-#SBATCH -p normal           # Queue name
-#SBATCH -J bowtie2
-#SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
-#SBATCH -n 16                     # Total number of tasks
-#SBATCH -t 24:00:00              # Run time (hh:mm:ss) - 1.5 hours
-#SBATCH --mail-user=scottdaniel@email.arizona.edu
-#SBATCH --mail-type=all
-#SBATCH -A iPlant-Collabs         # Specify allocation to charge against
+#!/usr/bin/env bash
 
-#automagic offloading for the xeon phi co-processor
-#in case anything uses Intel's Math Kernel Library
-export MKL_MIC_ENABLE=1
-export OMP_NUM_THREADS=16
-export MIC_OMP_NUM_THREADS=240
-export OFFLOAD_REPORT=2
+#PBS -W group_list=bhurwitz
+#PBS -q standard
+#PBS -l jobtype=cluster_only
+#PBS -l select=1:ncpus=12:mem=23gb:pcmem=2gb
+#PBS -l pvmem=46gb
+#PBS -l walltime=3:00:00
+#PBS -l cput=36:00:00
+#PBS -M scottdaniel@email.arizona.edu
+#PBS -m bea
+
+cd $PBS_O_WORKDIR
 
 set -u
 
-module load perl
-module load bowtie
-
 echo "Started at $(date) on host $(hostname)"
-
-CONFIG="$PRJ_DIR/scripts/config.sh"
-
-if [ -e $CONFIG ]; then
-    . "$CONFIG"
-else
-    echo MIssing config \"$CONFIG\"
-    exit 12385
-fi
 
 COMMON="$WORKER_DIR/common.sh"
 
@@ -80,7 +65,7 @@ while read LEFT_FASTQ; do
                 echo "Processing $LEFT_FASTQ"
             fi
 
-            bowtie2 -p 16 \
+            bowtie2 -p 12 \
                 --very-sensitive-local \
                 --no-unal \
                 --no-sq \

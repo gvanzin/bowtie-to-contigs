@@ -1,19 +1,18 @@
-#!/bin/bash
-#SBATCH -p normal           # Queue name
-#SBATCH -J makebams
-#SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
-#SBATCH -n 16                     # Total number of tasks
-#SBATCH -t 24:00:00              # Run time (hh:mm:ss) - 1.5 hours
-#SBATCH --mail-user=scottdaniel@email.arizona.edu
-#SBATCH --mail-type=all
-#SBATCH -A iPlant-Collabs         # Specify allocation to charge against
+#!/usr/bin/env bash
 
-#automagic offloading for the xeon phi co-processor
-#in case anything uses Intel's Math Kernel Library
-export MKL_MIC_ENABLE=1
-export OMP_NUM_THREADS=16
-export MIC_OMP_NUM_THREADS=240
-export OFFLOAD_REPORT=2
+#PBS -W group_list=bhurwitz
+#PBS -q standard
+#PBS -l jobtype=cluster_only
+#PBS -l select=1:ncpus=12:mem=23gb:pcmem=2gb
+#PBS -l pvmem=46gb
+#PBS -l walltime=3:00:00
+#PBS -l cput=36:00:00
+#PBS -M scottdaniel@email.arizona.edu
+#PBS -m bea
+
+if [ -n "$PBS_O_WORKDIR" ]; then
+    cd $PBS_O_WORKDIR
+fi
 
 set -u
 
@@ -28,7 +27,7 @@ fi
 
 TMP_FILES=$(mktemp)
 
-get_lines $FILES_TO_PROCESS $TMP_FILES $FILE_START $STEP_SIZE
+get_lines $FILES_TO_PROCESS $TMP_FILES $PBS_ARRAY_INDEX $STEP_SIZE
 
 NUM_FILES=$(lc $TMP_FILES)
 
@@ -40,9 +39,9 @@ while read FILE; do
 
     if [[ ! -s $BAM_OUT_DIR/$NEW_FILE.bam ]]; then
         echo Converting $FILE using reference $CONTIGS
-        samtools view -@ 16 -bT $CONTIGS $FILE > $FILE.temp
+        samtools view -@ 12 -bT $CONTIGS $FILE > $FILE.temp
         echo Sorting $FILE
-        samtools sort -@ 16 $FILE.temp > $BAM_OUT_DIR/$NEW_FILE.bam
+        samtools sort -@ 12 $FILE.temp > $BAM_OUT_DIR/$NEW_FILE.bam
         echo Removing $FILE.temp
         rm $FILE.temp
     else

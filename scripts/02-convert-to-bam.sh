@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #!/usr/bin/env bash
 
 #
@@ -16,7 +15,7 @@ else
     echo "Can't source $CONFIG"
     exit 1
 fi
-export STEP_SIZE=100 #adjust as needed
+export STEP_SIZE=10 #adjust as needed
 
 echo Setting up log files...
 PROG=`basename $0 ".sh"`
@@ -40,7 +39,7 @@ fi
 
 echo Submitting job...
 
-JOB=$(qsub -J 1-$NUM_FILES:$STEP_SIZE -V -N makebam -j oe -o "$STDOUT_DIR" $WORKER_DIR/make-bams.pbs)
+JOB=$(qsub -J 1-$NUM_FILES:$STEP_SIZE -V -N makebam -j oe -o "$STDOUT_DIR" $WORKER_DIR/make-bams.sh)
 
 if [ $? -eq 0 ]; then
   echo Submitted job \"$JOB\" for you. Weeeeee!

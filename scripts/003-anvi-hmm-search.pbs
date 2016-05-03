@@ -3,14 +3,16 @@
 #PBS -W group_list=bhurwitz
 #PBS -q standard
 #PBS -l jobtype=cluster_only
-#PBS -l select=1:ncpus=2:mem=3gb:pcmem=2gb
-#PBS -l pvmem=6gb
-#PBS -l walltime=24:10:00
-#PBS -l cput=24:10:00
+#PBS -l select=1:ncpus=12:mem=23gb:pcmem=2gb
+#PBS -l pvmem=46gb
+#PBS -l walltime=72:00:00
+#PBS -l cput=72:00:00
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m bea
 
-cd $PBS_O_WORKDIR
+if [ -n "$PBS_O_WORKDIR" ]; then
+    cd $PBS_O_WORKDIR
+fi
 
 module load hdf5
 

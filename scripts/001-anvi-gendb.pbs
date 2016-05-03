@@ -10,7 +10,9 @@
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m bea
 
-cd $PBS_O_WORKDIR
+if [ -n $PBS_O_WORKDIR ]; then
+    cd $PBS_O_WORKDIR
+fi
 
 module load hdf5
 
