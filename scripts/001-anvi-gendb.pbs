@@ -14,8 +14,6 @@ if [ -n $PBS_O_WORKDIR ]; then
     cd $PBS_O_WORKDIR
 fi
 
-module load hdf5
-
 CONFIG="./config.sh"
 
 if [ -e $CONFIG ]; then
