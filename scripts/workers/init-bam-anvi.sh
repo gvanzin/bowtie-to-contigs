@@ -1,24 +1,22 @@
-#!/bin/bash
-#SBATCH -p normal           # Queue name
-#SBATCH -J init-bams
-#SBATCH -N 1                     # Total number of nodes requested (16 cores/node)
-#SBATCH -n 16                     # Total number of tasks
-#SBATCH -t 24:00:00              # Run time (hh:mm:ss) - 1.5 hours
-#SBATCH --mail-user=scottdaniel@email.arizona.edu
-#SBATCH --mail-type=all
-#SBATCH -A iPlant-Collabs         # Specify allocation to charge against
+#!/usr/bin/env bash
 
-echo Started at $(date)
+#PBS -W group_list=bhurwitz
+#PBS -q standard
+#PBS -l jobtype=cluster_only
+#PBS -l select=1:ncpus=12:mem=23gb:pcmem=2gb
+#PBS -l pvmem=46gb
+#PBS -l walltime=3:00:00
+#PBS -l cput=3:00:00
+#PBS -M scottdaniel@email.arizona.edu
+#PBS -m bea
 
-#automagic offloading for the xeon phi co-processor
-#in case anything uses Intel's Math Kernel Library
-export MKL_MIC_ENABLE=1
-export OMP_NUM_THREADS=16
-export MIC_OMP_NUM_THREADS=240
-export OFFLOAD_REPORT=2
+if [ -n "$PBS_O_WORKDIR" ]; then
+    cd $PBS_O_WORKDIR
+fi
 
 set -u
 
+echo Started at $(date)
 COMMON="$WORKER_DIR/common.sh"
 
 if [ -e $COMMON ]; then

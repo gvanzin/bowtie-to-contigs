@@ -57,6 +57,6 @@ let i=1
 while read SAMPLE; do
     export SAMPLE
     echo Doing sample $SAMPLE 
-    sbatch -o $STDOUT_DIR/init-bam-anvi.out.$i $WORKER_DIR/init-bam-anvi.sh
+    qsub -V -j oe -o "$STDOUT_DIR" $WORKER_DIR/init-bam-anvi.sh
     (( i += 1 ))
 done < "$SAMPLES_TO_PROCESS"

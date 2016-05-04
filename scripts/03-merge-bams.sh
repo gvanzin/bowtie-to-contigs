@@ -61,6 +61,6 @@ let i=1
 while read SAMPLE; do
     export SAMPLE
     echo Doing samples $SAMPLE 
-    sbatch -o $STDOUT_DIR/bam-merge.out.$i $WORKER_DIR/merge-bams.sh
+    qsub -V -j oe -o "$STDOUT_DIR" $WORKER_DIR/merge-bams.sh
     (( i += 1 ))
 done < "$SAMPLES_TO_PROCESS"
