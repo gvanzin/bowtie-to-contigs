@@ -11,11 +11,18 @@
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m bea
 
+#We need to set the localscratch as the temp dir
+#because the exported contigs are too big to fit in /tmp
+#localscratch ~~ 1.5TB
+#tmp ~~ 1GB
+
+if [ -n "$TMPDIR" ]; then
+    export TMPDIR="/localscratch"
+fi
+
 if [ -n "$PBS_O_WORKDIR" ]; then
     cd $PBS_O_WORKDIR
 fi
-
-module load hdf5
 
 CONFIG="./config.sh"
 
