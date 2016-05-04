@@ -35,16 +35,23 @@ echo Checking samples $(cat $SAMPLE_NAMES)
 
 echo Checking that number of contigs is less than 20k
 
+let m=$MIN_CONTIG_SIZE
+
 echo "Minimum contig size is "$MIN_CONTIG_SIZE""
 
 TOTAL_CONTIGS=$(sqlite3 $ANVI_CONTIG_DB "select count(*) from contigs_basic_info where length > "$MIN_CONTIG_SIZE";")
 
-if [[ $TOTAL_CONTIGS -gt "20000" ]]; then
-    echo Number of contigs "$TOTAL_CONTIGS" is too big, change it in config.sh
-    exit 1
-else
-    echo Number of contigs is "$TOTAL_CONTIGS" ... proceeding ...
-fi
+while [[ "$TOTAL_CONTIGS" -gt "20000" ]]; do
+    
+    echo Number of contigs "$TOTAL_CONTIGS" is too big, increasing MIN_CONTIG_SIZE
+    (( m+=1 ))
+    TOTAL_CONTIGS=$(sqlite3 $ANVI_CONTIG_DB "select count(*) from contigs_basic_info where length > "$MIN_CONTIG_SIZE";")
+    export MIN_CONTIG_SIZE=$m
+
+done
+
+echo Minimum contig size is "$MIN_CONTIG_SIZE"
+echo Number of contigs is "$TOTAL_CONTIGS" ... proceeding ...
 
 while read SAMPLE; do
 
@@ -71,6 +78,6 @@ let i=1
 while read SAMPLE; do
     export SAMPLE
     echo Doing sample $SAMPLE 
-    sbatch -o $STDOUT_DIR/profile-bam.out.$i $WORKER_DIR/profile-bam.sh
+    qsub -V -j oe -o "$STDOUT_DIR" $WORKER_DIR/profile-bam.sh
     (( i += 1 ))
 done < "$SAMPLES_TO_PROCESS"
