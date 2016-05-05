@@ -38,8 +38,14 @@ else
 fi
 
 cd $CONTIG_DIR
-#anvi-gen-contigs-database -f $CONTIGS -o $ANVI_CONTIG_DB
+
+echo "getting annotation from rast server, this is slowest step"
 svr_assign_to_dna_using_figfams < $CONTIGS > svr_assign_to_dna_using_figfams.txt
+
+echo "importing annotations into anvio contig database"
 anvi-populate-genes-table -c $ANVI_CONTIG_DB -p myrast_cmdline_dont_use -i svr_assign_to_dna_using_figfams.txt
+
+echo "saving annotation in more native format in case we need to re-import later"
 anvi-export-genes-table -c $ANVI_CONTIG_DB -o rast_annotation.txt
+
 
