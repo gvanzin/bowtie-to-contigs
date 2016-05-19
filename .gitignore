@@ -48,5 +48,4 @@ files_to_process
 left_fastqs
 right_fastqs
 sam_files
-sample-names
 samples_to_process
