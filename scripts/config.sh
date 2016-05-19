@@ -6,7 +6,7 @@ export CWD=$PWD
 export SCRIPT_DIR=$CWD
 
 #your root working directory (not your $HOME but maybe it is)
-export COMMON_DIR="/gsfs1/rsgrps/bhurwitz/scottdaniel"
+export COMMON_DIR="/rsgrps/bhurwitz/scottdaniel"
 
 #root project dir
 export PRJ_DIR="$COMMON_DIR/bowtie-to-contigs"
@@ -16,9 +16,10 @@ export CONTIG_DIR="$COMMON_DIR/make-custom-patric-metagenome/data"
 export CONTIGS="$CONTIG_DIR/custom_contigs.fa"
 export BOWTIE2_DB="$CONTIG_DIR/contigs"
 export ANVI_CONTIG_DB="$CONTIG_DIR/anvi-contig.db"
+export CONTIGS_ANNOT="$CONTIG_DIR/patric-annotation-for-contigs.tab"
 
-#minimum contig size to get total contigs down to 20k
-export MIN_CONTIG_SIZE="44940" #guess right now
+#minimum contig size to get total contigs at or below 10k
+export MIN_CONTIG_SIZE="50000"
 
 #input fasta
 #export FASTA_DIR="$PRJ_DIR/fasta"

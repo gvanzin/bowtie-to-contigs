@@ -2,11 +2,9 @@
 
 #PBS -W group_list=bhurwitz
 #PBS -q standard
-#PBS -l jobtype=cluster_only
-#PBS -l select=1:ncpus=12:mem=23gb:pcmem=2gb
-#PBS -l pvmem=46gb
-#PBS -l walltime=24:10:00
-#PBS -l cput=24:10:00
+#PBS -l select=1:ncpus=6:mem=252gb:pcmem=42gb
+#PBS -l walltime=24:00:00
+#PBS -l cput=24:00:00
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m bea
 
@@ -14,6 +12,12 @@ if [ -n $PBS_O_WORKDIR ]; then
     cd $PBS_O_WORKDIR
 fi
 
+#need gsl library for 'import anvio.concoct'
+#ua hpc library is good enough
+#module load gsl
+echo "If LD_LIBRARY_PATH doesn't have libgsl.so.0 there, you are screwed"
+echo $LD_LIBRARY_PATH
+find $LD_LIBRARY_PATH -iname libgsl.so.0
 
 
 CONFIG="./config.sh"
@@ -34,5 +38,9 @@ else
   exit 1
 fi
 
+#No concot binning because we already know which contigs are grouped by genome
+
 cd $FINAL_BAM_DIR
-anvi-merge */RUNINFO.cp -o ALL-DNA-MERGED -c $ANVI_CONTIG_DB
+anvi-merge \
+    --skip-concoct-binning \
+    -W */RUNINFO.cp -o ALL-DNA-MERGED -c $ANVI_CONTIG_DB

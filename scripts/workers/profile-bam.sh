@@ -2,11 +2,9 @@
 
 #PBS -W group_list=bhurwitz
 #PBS -q standard
-#PBS -l jobtype=cluster_only
-#PBS -l select=1:ncpus=12:mem=23gb:pcmem=2gb
-#PBS -l pvmem=46gb
-#PBS -l walltime=3:00:00
-#PBS -l cput=3:00:00
+#PBS -l select=1:ncpus=6:mem=252gb:pcmem=42gb
+#PBS -l walltime=12:00:00
+#PBS -l cput=12:00:00
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m bea
 

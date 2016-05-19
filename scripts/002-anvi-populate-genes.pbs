@@ -2,17 +2,17 @@
 
 #PBS -W group_list=bhurwitz
 #PBS -q standard
-#PBS -l jobtype=cluster_only
-#PBS -l select=1:ncpus=2:mem=3gb:pcmem=2gb
-#PBS -l pvmem=6gb
-#PBS -l walltime=72:00:00
-#PBS -l cput=72:00:00
+#PBS -l jobtype=serial
+#PBS -l select=1:ncpus=12:mem=23gb:pcmem=2gb
+#PBS -l pvmem=46gb
+#PBS -l walltime=24:00:00
+#PBS -l cput=24:00:00
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m bea
 
-#if [ -n "$PBS_O_WORKDIR" ]; then
-#    cd $PBS_O_WORKDIR
-#fi
+if [ -n "$PBS_O_WORKDIR" ]; then
+    cd $PBS_O_WORKDIR
+fi
 
 CONFIG="./config.sh"
 
@@ -32,9 +32,12 @@ else
   exit 1
 fi
 
+module load R
+Rscript ./FIX-ANNOTATION.R
+
 cd $CONTIG_DIR
 #anvi-gen-contigs-database -f $CONTIGS -o $ANVI_CONTIG_DB
 #svr_assign_to_dna_using_figfams < $CONTIGS > svr_assign_to_dna_using_figfams.txt
-anvi-populate-genes-table -c $ANVI_CONTIG_DB -p myrast_cmdline_dont_use -i svr_assign_to_dna_using_figfams.txt
-anvi-export-genes-table -c $ANVI_CONTIG_DB -o rast_annotation.txt
+anvi-populate-genes-table -c $ANVI_CONTIG_DB -p default_matrix -i $CONTIGS_ANNOT
+#anvi-export-genes-table -c $ANVI_CONTIG_DB -o rast_annotation.txt
 

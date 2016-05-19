@@ -2,23 +2,13 @@
 
 #PBS -W group_list=bhurwitz
 #PBS -q standard
-#PBS -l jobtype=serial
-#PBS -l localscratch=1
-#PBS -l select=1:ncpus=12:mem=23gb:pcmem=2gb
-#PBS -l pvmem=46gb
-#PBS -l walltime=72:00:00
-#PBS -l cput=72:00:00
+#PBS -l jobtype=cluster_only
+#PBS -l select=1:ncpus=6:mem=11gb:pcmem=2gb
+#PBS -l pvmem=22gb
+#PBS -l walltime=120:00:00
+#PBS -l cput=240:00:00
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m bea
-
-#We need to set the localscratch as the temp dir
-#because the exported contigs are too big to fit in /tmp
-#localscratch ~~ 1.5TB
-#tmp ~~ 1GB
-
-if [ -n "$TMPDIR" ]; then
-    export TMPDIR="/localscratch"
-fi
 
 if [ -n "$PBS_O_WORKDIR" ]; then
     cd $PBS_O_WORKDIR
@@ -33,6 +23,10 @@ else
     exit 12385
 fi
 
+if [ -n "$TMPDIR" ]; then
+    export TMPDIR="$PRJ_DIR"
+fi
+
 COMMON="$WORKER_DIR/common.sh"
 
 if [ -e $COMMON ]; then
@@ -45,3 +39,20 @@ fi
 cd $CONTIG_DIR
 anvi-populate-search-table -c $ANVI_CONTIG_DB
 
+#old stuff:
+###PBS -W group_list=bhurwitz
+###PBS -q standard
+###PBS -l jobtype=htc_only
+###PBS -l select=1:ncpus=12:mem=23gb
+###PBS -l localscratch=1
+###PBS -l pvmem=46gb
+###PBS -l walltime=72:00:00
+###PBS -l cput=72:00:00
+###PBS -M scottdaniel@email.arizona.edu
+###PBS -m bea
+##
+###We need to set the localscratch as the temp dir
+###because the exported contigs are too big to fit in /tmp
+###localscratch ~~ 1.5TB
+###tmp ~~ 1GB
+#
