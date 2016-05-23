@@ -5,8 +5,8 @@
 #PBS -l jobtype=cluster_only
 #PBS -l select=1:ncpus=6:mem=11gb:pcmem=2gb
 #PBS -l pvmem=22gb
-#PBS -l walltime=120:00:00
-#PBS -l cput=240:00:00
+#PBS -l walltime=60:00:00
+#PBS -l cput=120:00:00
 #PBS -M scottdaniel@email.arizona.edu
 #PBS -m bea
 
