@@ -35,6 +35,7 @@ fi
 cd $CONTIG_DIR
 
 #fix annotation so there is only a single header
+find ./contig-out/ -iname \*.tab -print0 | xargs -0 -I file cat file > $CONTIGS_ANNOT
 head -1 $CONTIGS_ANNOT > header.temp
 egrep -v '^prot\s.+' $CONTIGS_ANNOT > temp.tab
 cat header.temp temp.tab > temp2.tab
@@ -42,8 +43,11 @@ mv temp2.tab $CONTIGS_ANNOT
 mv temp.tab annotation_backup.tab
 
 #fix annotation so prot numbers are sequential (and smaller)
+if [ -n "$PBS_O_WORKDIR" ]; then
+    cd $PBS_O_WORKDIR
+fi
 module load R
-Rscript ./FIX-ANNOTATION.R
+Rscript $SCRIPT_DIR/FIX-ANNOTATION.R
 
 #anvi-gen-contigs-database -f $CONTIGS -o $ANVI_CONTIG_DB
 #svr_assign_to_dna_using_figfams < $CONTIGS > svr_assign_to_dna_using_figfams.txt
