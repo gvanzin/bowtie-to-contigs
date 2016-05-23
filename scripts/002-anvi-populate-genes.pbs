@@ -34,6 +34,7 @@ fi
 
 #get rid of multiple headers
 cd $CONTIG_DIR
+find ./contig-out/ -iname \*.tab -print0 | xargs -0 -I file cat file > $CONTIGS_ANNOT
 head -1 $CONTIGS_ANNOT > header.temp
 egrep -v '^prot\s.+' $CONTIGS_ANNOT > temp.tab
 cat header.temp temp.tab > temp2.tab
@@ -41,6 +42,9 @@ mv temp2.tab $CONTIGS_ANNOT
 mv temp.tab annotation-backup.tab
 
 #make prot numbers sequential (and smaller for reduced file size)
+if [ -n "$PBS_O_WORKDIR" ]; then
+    cd $PBS_O_WORKDIR
+fi
 module load R
 Rscript ./FIX-ANNOTATION.R
 
