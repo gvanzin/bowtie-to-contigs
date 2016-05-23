@@ -42,5 +42,6 @@ fi
 
 cd $FINAL_BAM_DIR
 anvi-merge \
+    --skip-hierarchical-clustering \
     --skip-concoct-binning \
     -W */RUNINFO.cp -o ALL-DNA-MERGED -c $ANVI_CONTIG_DB
