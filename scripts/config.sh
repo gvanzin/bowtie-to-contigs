@@ -12,14 +12,14 @@ export COMMON_DIR="/rsgrps/bhurwitz/scottdaniel"
 export PRJ_DIR="$COMMON_DIR/bowtie-to-contigs"
 
 #input contigs / also where bowtie2db will be
-export CONTIG_DIR="$COMMON_DIR/make-custom-patric-metagenome/data"
+export CONTIG_DIR="$COMMON_DIR/make-small-patric/data"
 export CONTIGS="$CONTIG_DIR/custom_contigs.fa"
 export BOWTIE2_DB="$CONTIG_DIR/contigs"
 export ANVI_CONTIG_DB="$CONTIG_DIR/anvi-contig.db"
 export CONTIGS_ANNOT="$CONTIG_DIR/patric-annotation-for-contigs.tab"
 
-#minimum contig size to get total contigs at or below 10k
-export MIN_CONTIG_SIZE="50000"
+#because the total is 1111 for contigs we can use all
+export MIN_CONTIG_SIZE="1"
 
 #input fasta
 #export FASTA_DIR="$PRJ_DIR/fasta"

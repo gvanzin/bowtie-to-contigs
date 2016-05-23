@@ -32,10 +32,18 @@ else
   exit 1
 fi
 
+#get rid of multiple headers
+cd $CONTIG_DIR
+head -1 $CONTIGS_ANNOT > header.temp
+egrep -v '^prot\s.+' $CONTIGS_ANNOT > temp.tab
+cat header.temp temp.tab > temp2.tab
+mv temp2.tab $CONTIGS_ANNOT
+mv temp.tab annotation-backup.tab
+
+#make prot numbers sequential (and smaller for reduced file size)
 module load R
 Rscript ./FIX-ANNOTATION.R
 
-cd $CONTIG_DIR
 #anvi-gen-contigs-database -f $CONTIGS -o $ANVI_CONTIG_DB
 #svr_assign_to_dna_using_figfams < $CONTIGS > svr_assign_to_dna_using_figfams.txt
 anvi-populate-genes-table -c $ANVI_CONTIG_DB -p default_matrix -i $CONTIGS_ANNOT
